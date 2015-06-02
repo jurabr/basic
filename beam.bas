@@ -25,4 +25,6 @@ REM Computation of DOFs number (just M's + DOFS on ends)
 REM Assebling of stiffness matrix
 100 FOR I=1 TO N
 
+REM ToDo: mlocal matrix members + localization
+
 199 NEXT I
