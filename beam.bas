@@ -2,9 +2,9 @@ REM Continuous beam without normal forces
 REM Finite differences method
 
 REM Data input:
-REM      VVVVV
-REM +----+---+----+
-REM ^ 6  ^ 5 ^  6 ^
+REM      VVVVVVVVV
+REM +----+---+---+----+
+REM ^ 6  ^ 5 ^ 5 ^  6 ^
 REM N   .. number of beams
 REM E*I .. bending stiffness
 REM L q (repeaing N times) .. lenght, load
