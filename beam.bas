@@ -9,7 +9,7 @@ REM N   .. number of beams
 REM E*I .. bending stiffness
 REM L q (repeaing N times) .. lenght, load
 REM L R .. (supports on ends: 1..simple, 0..full)
-10 DATA 3 2000  6 0 6 1000 6 0   1 1 
+10 DATA 4 2000000000  6 0 6 1667 6 1667 6 0   1 1 
 20 READ N
 25 READ Y
 30 DIM E(10)
@@ -29,6 +29,7 @@ REM Assebling of stiffness matrix
 110 LET K = I-1+F(0)
 120 LET H = I+F(0)
 130 IF I=N THEN
+134 H = 0
 140 IF F(1)=1 THEN
 150 LET H=Q
 150 END IF
@@ -55,11 +56,13 @@ REM Control print of stiffness matrix:
 300 LET N = Q
 310 GOSUB 4300
 
+REM BWBASIC end:
 quit
 
 998  END
 
 REM Localisation procedure:
+REM Member (2,1) is not needed IN THIS CASE
 999  LET J = 2*(I-1)+1
 1000 LET L = E(J)
 1001 LET W = E(J+1)
@@ -72,8 +75,6 @@ REM Localisation procedure:
 1035 IF (K*H)>0 THEN
 1040 LET P = K +(H*H-H)/2-1
 1050 LET A(P) = A(P) + 2*Y/L
-1080 LET P = H +(K*K-K)/2-1
-1090 LET A(P) = A(P) + 2*Y/L
 1095 END IF
 1099 IF H>0 THEN
 1100 LET P = H +(H*H-H)/2-1
@@ -82,7 +83,8 @@ REM Localisation procedure:
 1120 END IF
 1130 RETURN 
 
-REM GAUSS Ellimination:
+REM GAUSS Ellimination (from gauss4.bas):
+REM uses symmetric matrix (upper triangle)
 
 REM Forward run:
 4300 FOR K = 1 TO N-1 

@@ -2,7 +2,7 @@ REM Gauss Elimination (full, dense matrix A)
 REM Indexes start from 1
 REM Only symmetric upper part of materix is used!
 REM Attempt to use 1D arrays
-REM "A" Indexes: L = I +(J*J-J)/2
+REM "A" Indexes: L = I +(J*J-J)/2 -1
 
 REM Data input:
 10 DATA 3 1 2 3  2 1 3 3 3 7 5 5 5
@@ -19,7 +19,7 @@ REM Data input:
 67 END IF
 70 NEXT J
 80 NEXT I
-90 FOR I = 1 TO N STEP 1
+90 FOR I = 0 TO N-1 STEP 1
 95 READ B(I)
 100 NEXT I
 
@@ -29,7 +29,7 @@ REM Control print of data:
 155 LET L = I +(J*J-J)/2
 160 PRINT A(L);
 170 NEXT J
-175 PRINT " |";B(I)
+175 PRINT " |";B(I-1)
 180 NEXT I
 
 REM Forward run:
@@ -43,26 +43,26 @@ REM Forward run:
 332 LET M = K +(J*J-J)/2 -1
 340 LET A(L) = A(L) - C*A(M)
 350 NEXT J
-360 LET B(I) = B(I) - C*B(K)
+360 LET B(I-1) = B(I-1) - C*B(K-1)
 370 NEXT I
 380 NEXT K
 385 LET L = N +(N*N-N)/2 -1
-390 LET B(N) = B(N) / A(L)
+390 LET B(N-1) = B(N-1) / A(L)
 
 REM Backward run:
 400 FOR I = N-1 TO 1 STEP -1
 410 LET S = 0
 420 FOR J = I+1 TO N
 421 LET L = I +(J*J-J)/2 -1
-430 LET S = S + A(L) * B(J)
+430 LET S = S + A(L) * B(J-1)
 440 NEXT J
 441 LET L = I +(I*I-I)/2 -1
-450 LET B(I) = (B(I)-S)/A(L)
+450 LET B(I-1) = (B(I-1)-S)/A(L)
 460 NEXT I
 
 REM Results:
 500 PRINT "Results:"
-510 FOR I = 1 TO N
+510 FOR I = 0 TO N-1
 520 PRINT B(I)
 530 NEXT I
 
