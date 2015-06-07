@@ -155,6 +155,8 @@ REM Results:
 4510 FOR I = 0 TO Q-1
 4520 PRINT B(I)
 4530 NEXT I
+
+REM Return from Gauss:
 4600 RETURN
 
 REM Pseudo-graphics image of structrure
