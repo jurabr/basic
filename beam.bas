@@ -9,7 +9,7 @@ REM N   .. number of beams
 REM E*I .. bending stiffness
 REM L q (repeaing N times) .. lenght, load
 REM L R .. (supports on ends: 1..simple, 0..full)
-10 DATA 4 2000000000  6 0 6 1667 6 1667 6 0   1 1 
+10 DATA 4 2000000000  6 0 6 1667 6 1667 6 0   0 0 
 20 READ N
 25 READ Y
 30 DIM E(10)
@@ -53,10 +53,11 @@ REM Control print of stiffness matrix:
 280 PRINT " | " ;B(I-1)
 290 NEXT I
 
-300 LET N = Q
+REM Gauss ellimination:
 310 GOSUB 4300
 
-320 FOR I=1 TO N-1
+REM Results:
+320 FOR I=1 TO N
 330 LET T=0
 340 LET U=0
 350 GOSUB 2000
@@ -92,7 +93,6 @@ REM Member (2,1) is not needed IN THIS CASE
 1130 RETURN 
 
 REM Element results (V1,M1, V2,Q2)
-REM No primary moment (from continuous load) at the moment:
 2000 LET J = 2*(I-1)+1
 2010 LET L = E(J)
 2020 LET W = E(J+1)
@@ -100,9 +100,14 @@ REM No primary moment (from continuous load) at the moment:
 2040 LET A(1) = Y/L/L*6
 2050 LET A(2) = Y/L*4
 2110 LET P=F(0)+I-2
+2115 LET D = 0
+2116 IF P> -1 THEN
 2120 LET D = B(P)
+2121 END IF
+2128 LET C = 0
+2129 IF (P+1) <(Q+1) THEN
 2130 LET C = B(P+1)
-REM 2133 PRINT "defs:";D;C
+2131 END IF
 2140 LET O = T -A(1)*D - A(1)*C
 2140 LET R = U + A(2)*D +0.5*A(2)*C -W
 2140 LET T = A(1)*D +A(1)*C
@@ -114,12 +119,12 @@ REM GAUSS Ellimination (from gauss4.bas):
 REM uses symmetric matrix (upper triangle)
 
 REM Forward run:
-4300 FOR K = 1 TO N-1 
-4310 FOR I = K+1 TO N 
+4300 FOR K = 1 TO Q-1 
+4310 FOR I = K+1 TO Q 
 4311 LET L = K + (I*I-I)/2 -1
 4312 LET M = K + (K*K-K)/2 -1
 4320 LET C = A(L)/A(M)
-4330 FOR J = I TO N
+4330 FOR J = I TO Q
 4331 LET L = I +(J*J-J)/2 -1
 4332 LET M = K +(J*J-J)/2 -1
 4340 LET A(L) = A(L) - C*A(M)
@@ -127,13 +132,13 @@ REM Forward run:
 4360 LET B(I-1) = B(I-1) - C*B(K-1)
 4370 NEXT I
 4380 NEXT K
-4385 LET L = N +(N*N-N)/2 -1
-4390 LET B(N-1) = B(N-1) / A(L)
+4385 LET L = Q +(Q*Q-Q)/2 -1
+4390 LET B(Q-1) = B(Q-1) / A(L)
 
 REM Backward run:
-4400 FOR I = N-1 TO 1 STEP -1
+4400 FOR I = Q-1 TO 1 STEP -1
 4410 LET S = 0
-4420 FOR J = I+1 TO N
+4420 FOR J = I+1 TO Q
 4421 LET L = I +(J*J-J)/2 -1
 4430 LET S = S + A(L) * B(J-1)
 4440 NEXT J
@@ -143,7 +148,7 @@ REM Backward run:
 
 REM Results:
 4500 PRINT "Deformations:"
-4510 FOR I = 0 TO N-1
+4510 FOR I = 0 TO Q-1
 4520 PRINT B(I)
 4530 NEXT I
 4600 RETURN
