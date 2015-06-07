@@ -9,7 +9,7 @@ REM N   .. number of beams
 REM E*I .. bending stiffness
 REM L q (repeaing N times) .. lenght, load
 REM L R .. (supports on ends: 1..simple, 0..full)
-10 DATA 4 2000000000  6 0 6 1667 6 1667 6 0   0 0 
+10 DATA 4 2000000000  6 0 6 1667 6 1667 6 0   1 1 
 20 READ N
 25 READ Y
 30 DIM E(10)
@@ -36,6 +36,9 @@ REM Assebling of stiffness matrix
 160 END IF
 170 GOSUB 999
 180 NEXT I
+
+REM Pseudo-image of structure
+190 GOSUB 5000
 
 REM Control print of stiffness matrix:
 199 PRINT "System of equations:"
@@ -64,6 +67,7 @@ REM Results:
 360 PRINT "Ml";I;":";R
 370 PRINT "Mr";I;":";U
 399 NEXT I
+
 
 REM BWBASIC end:
 quit
@@ -152,3 +156,23 @@ REM Results:
 4520 PRINT B(I)
 4530 NEXT I
 4600 RETURN
+
+REM Pseudo-graphics image of structrure
+5000 IF F(0)=1 THEN 5004
+5001 PRINT "|";
+5004 PRINT "+";
+5010 FOR I=1 TO N 
+5011 FOR J=1 TO 2
+5012 LET K=2*(I-1)+2
+5013 IF E(K) >0.0 THEN 5016
+5014 PRINT "-";
+5015 GOTO 5017
+5016 PRINT "V";
+5017 NEXT J
+5018 PRINT "+";
+5019 NEXT I
+5020 IF F(1)=1 THEN 5024
+5021 PRINT "|"
+5022 GOTO 5030
+5024 PRINT " "
+5030 RETURN
