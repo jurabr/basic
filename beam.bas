@@ -56,6 +56,14 @@ REM Control print of stiffness matrix:
 300 LET N = Q
 310 GOSUB 4300
 
+320 FOR I=1 TO N-1
+330 LET T=0
+340 LET U=0
+350 GOSUB 2000
+360 PRINT "Ml";I;":";R
+370 PRINT "Mr";I;":";U
+399 NEXT I
+
 REM BWBASIC end:
 quit
 
@@ -82,6 +90,25 @@ REM Member (2,1) is not needed IN THIS CASE
 1111 LET B(H-1) = B(H-1) - W
 1120 END IF
 1130 RETURN 
+
+REM Element results (V1,M1, V2,Q2)
+REM No primary moment (from continuous load) at the moment:
+2000 LET J = 2*(I-1)+1
+2010 LET L = E(J)
+2020 LET W = E(J+1)
+2030 LET W = W*L*L/12
+2040 LET A(1) = Y/L/L*6
+2050 LET A(2) = Y/L*4
+2110 LET P=F(0)+I-2
+2120 LET D = B(P)
+2130 LET C = B(P+1)
+REM 2133 PRINT "defs:";D;C
+2140 LET O = T -A(1)*D - A(1)*C
+2140 LET R = U + A(2)*D +0.5*A(2)*C -W
+2140 LET T = A(1)*D +A(1)*C
+2140 LET U = 0.5*A(2)*D +A(2)*C +W
+2200 RETURN 
+
 
 REM GAUSS Ellimination (from gauss4.bas):
 REM uses symmetric matrix (upper triangle)
@@ -115,7 +142,7 @@ REM Backward run:
 4460 NEXT I
 
 REM Results:
-4500 PRINT "Results:"
+4500 PRINT "Deformations:"
 4510 FOR I = 0 TO N-1
 4520 PRINT B(I)
 4530 NEXT I
