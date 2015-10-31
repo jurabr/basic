@@ -1,5 +1,5 @@
 REM Continuous beam without normal forces
-REM Finite differences method
+REM Direct stiffness method
 
 REM Data input:
 REM      VVVVVVVVV
