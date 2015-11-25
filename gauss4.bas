@@ -26,7 +26,7 @@ REM Data input:
 REM Control print of data:
 140 FOR I = 1 TO N
 150 FOR J = 1 TO N
-155 LET L = I +(J*J-J)/2
+155 LET L = I +(J*J-J)/2 -1
 160 PRINT A(L);
 170 NEXT J
 175 PRINT " |";B(I-1)
