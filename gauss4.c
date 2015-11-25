@@ -36,10 +36,18 @@ int main(int argc, char *argv[])
     {
         for(j=1; j<=n; j++)
         {
+          if (j >= i)
+          {
             printf("%e  ",A[i+(j*j-j)/2 -1]);
+          }
+          else
+          {
+            printf("%e  ",A[j+(i*i-i)/2 -1]);
+          }
         }
         printf(" | %e\n",b[i-1]);
     }
+
 
     for (i=0; i<n; i++) {x[i] = b[i] ;}
 
