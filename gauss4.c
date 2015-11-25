@@ -41,6 +41,8 @@ int main(int argc, char *argv[])
         printf(" | %e\n",b[i-1]);
     }
 
+    for (i=0; i<n; i++) {x[i] = b[i] ;}
+
     /* dopredny chod */
     for (k=1; k<n; k++)
     {
@@ -55,11 +57,11 @@ int main(int argc, char *argv[])
           m = k + (j*j-j)/2-1 ;
           A[l] -= c*A[m] ;
         }
-        b[i-1] -= c*b[k-1] ;
+        x[i-1] = x[i-1] - c*x[k-1] ;
       }
     }
     l = n + (n*n-n)/2-1 ;
-    b[n-1] = b[n-1] / A[l] ;
+    x[n-1] = x[n-1] / A[l] ;
 
     /* zpetny chod */
     for (i=n-1 ; i >=1; i--)
@@ -68,17 +70,17 @@ int main(int argc, char *argv[])
       for (j=i+1; j<=n; j++)
       {
         l = i + (j*j-j)/2-1 ;
-        s += A[l] * b[j-1] ;
+        s += A[l] * x[j-1] ;
       }
       l = i + (i*i-i)/2-1 ;
-      b[i-1] = (b[i-1]-s) / A[l] ;
+      x[i-1] = (x[i-1]-s) / A[l] ;
     }
     
 
     printf("\nResults: \n");
     for(i=0; i<n; i++)
     {
-       printf("x[%d] = %e\n",i+1,b[i]);
+       printf("x[%d] = %e\n",i+1,x[i]);
     }
 
     return(0);
