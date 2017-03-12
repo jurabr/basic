@@ -6,7 +6,7 @@ REM Computes V and M forces on beam if Va Ma, Mb, L, qa, qb are given
 41 LET Y = L - X
 42 LET P = Q*L/2 - Q*X + ((R-Q)*L/6 - (R-Q)*X*X/2/L)
 43 LET V =  P - (B+A)/L
-45 LET P = Q*X*L/2 - Q*X*X/2 + ((R-Q)*x*L/6 - (R-X)*x*x*x/6/L)
+45 LET P = Q*X*L/2 - Q*X*X/2 + ((R-Q)*x*L/6 - (R-Q)*X*X*X/6/L)
 46 LET M = P + (B*X - A*Y)/L
 50 PRINT I,X,V,M
 99 NEXT I
