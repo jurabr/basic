@@ -27,6 +27,13 @@
    |      |   h
    |      +-b-+
    +---> x
+
+   use:
+   stdin  - input data (N, [x0,y0,b,h]
+   stderr - text results
+   stdout - postscript output
+
+   p.s. define hole with b<0.0
 */
 
 #include <stdio.h>
