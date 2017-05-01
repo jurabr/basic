@@ -32,6 +32,7 @@
    stdin  - input data (N, [x0,y0,b,h]
    stderr - text results
    stdout - postscript output
+   example use: cat input.txt | ./i 2>report.txt >image.ps 
 
    p.s. define hole with b<0.0
 */
@@ -45,7 +46,7 @@
 #define DIMS2 100
 #define D10   10
 
-/* Coputed data: */
+/* Computed data: */
 int    n ;
 double x[I_MAX] ;
 double y[I_MAX] ;
@@ -127,7 +128,7 @@ int compute_I(void)
     Dxy = c*d*A ;
   }
 
-  fprintf(stderr,"Moments of inertia:\nIx = %1.4lf Iy = %1.4lf Dxy = %1.4f\n",Ix,Iy, Dxy);
+  fprintf(stderr,"Moments of inertia:\nIx = %1.4lf Iy = %1.4lf, Dxy = %1.4f\n",Ix,Iy, Dxy);
 
   return(0);
 }
@@ -219,12 +220,14 @@ int draw_ps(FILE *fw, int x0, int y0, int x1, int y1)
 
   /* coordinates: */
   fprintf(fw,"%i setlinewidth\n", 1);
+  fprintf(fw,"%1.1f setgray\n", 0.5);
   fprintf(fw,"%i %i moveto %i %i lineto\nclosepath\n", 0, 0, DIMS+D10, 0);
   fprintf(fw,"%i stroke\n", 1);
   fprintf(fw,"%i %i moveto %i %i lineto\nclosepath\n", DIMS+D10, 0, DIMS, (int)(-D10/4));
   fprintf(fw,"%i stroke\n", 1);
   fprintf(fw,"%i %i moveto %i %i lineto\nclosepath\n", DIMS+D10, 0, DIMS, (int)(+D10/4));
   fprintf(fw,"%i stroke\n", 1);
+  fprintf(fw,"%i %i moveto\n (%s)show\n",DIMS,(int)(D10/2),"x");
 
   fprintf(fw,"%i %i moveto %i %i lineto\nclosepath\n", 0, 0, 0, DIMS+D10);
   fprintf(fw,"%i stroke\n", 1);
@@ -232,6 +235,8 @@ int draw_ps(FILE *fw, int x0, int y0, int x1, int y1)
   fprintf(fw,"%i stroke\n", 1);
   fprintf(fw,"%i %i moveto %i %i lineto\nclosepath\n", 0, DIMS+D10, (int)(+D10/4), DIMS);
   fprintf(fw,"%i stroke\n", 1);
+  fprintf(fw,"%i %i moveto\n (%s)show\n",(int)(D10/2),DIMS+(int)(D10/2)-2,"y");
+  fprintf(fw,"%1.1f setgray\n", 0.0);
 
 
   /* center of gravity: */
@@ -241,7 +246,7 @@ int draw_ps(FILE *fw, int x0, int y0, int x1, int y1)
   fprintf(fw,"%i stroke\n", 1);
   fprintf(fw,"%i %i moveto\n (%s)show\n",px(tx)+4,px(ty)+5,"t");
 
-  /* TODO stuff here: */
+  /* rectangles: */
   for (i=0; i<n; i++)
   {
     ix[0] = px(x[i]) ;
@@ -262,13 +267,14 @@ int draw_ps(FILE *fw, int x0, int y0, int x1, int y1)
     fprintf(fw,"%i setlinewidth\n", 2);
     for (j=0; j<4; j++)
     {
-      fprintf(fw,"%i %i moveto %i %i lineto\nclosepath\n", 
+      fprintf(fw,"%i %i moveto %i %i lineto\n", 
           ix[j], 
           iy[j], 
           ix[j+1],
           iy[j+1]);
       fprintf(fw,"%i stroke\n", 1);
     }
+    fprintf(fw,"closepath\nstroke\n");
 
     if (b[i] < 0.0) /* hole */
     {
